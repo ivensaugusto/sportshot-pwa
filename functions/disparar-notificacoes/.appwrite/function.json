@@ -1,0 +1,2 @@
+runtime = "node-22.0"
+entrypoint = "src/index.js"

@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  sportshot-pwa:
+    build: .
+    container_name: sportshot-pwa
+    restart: always
+    expose:
+      - "80"
+    environment:
+      - VIRTUAL_HOST=sportshot.simplemsg.net.br
+      - LETSENCRYPT_HOST=sportshot.simplemsg.net.br
+      - LETSENCRYPT_EMAIL=ivensaugusto@produtoweb.com.br
+    networks:
+      - pwbot_net
+
+networks:
+  pwbot_net:
+    external: true
