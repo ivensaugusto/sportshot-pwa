@@ -21,6 +21,7 @@ export default function AdminPage() {
 
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const [url, setUrl] = useState('');
   const [sendState, setSendState] = useState<SendState>('idle');
   const [result, setResult] = useState<DispatchResult | null>(null);
   const [sendError, setSendError] = useState('');
@@ -68,7 +69,11 @@ export default function AdminPage() {
     try {
       const execution = await functions.createExecution(
         FUNCTION_ID,
-        JSON.stringify({ title: title.trim(), body: body.trim() }),
+        JSON.stringify({ 
+          title: title.trim(), 
+          body: body.trim(),
+          url: url.trim() || undefined
+        }),
         false
       );
 
@@ -78,6 +83,7 @@ export default function AdminPage() {
         setSendState('success');
         setTitle('');
         setBody('');
+        setUrl('');
       } else {
         setSendError(`Erro na execução: ${execution.status}`);
         setSendState('error');
@@ -224,6 +230,18 @@ export default function AdminPage() {
                 placeholder="Ex: Participe do nosso torneio mensal. Vagas limitadas, inscreva-se agora!"
                 maxLength={200}
                 required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="notif-url" className="form-label">Link de Destino (Opcional)</label>
+              <input
+                id="notif-url"
+                type="url"
+                className="form-input"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="Ex: https://forms.gle/... ou https://seusite.com/evento"
               />
             </div>
 
