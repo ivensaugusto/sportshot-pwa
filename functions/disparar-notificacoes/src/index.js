@@ -2,6 +2,12 @@ import { Client, Databases, Query } from 'node-appwrite';
 import webpush from 'web-push';
 
 export default async ({ req, res, log, error }) => {
+  // Remove proxies que quebram o node-fetch com endpoints HTTPS no Appwrite
+  delete process.env.http_proxy;
+  delete process.env.https_proxy;
+  delete process.env.HTTP_PROXY;
+  delete process.env.HTTPS_PROXY;
+
   // ─── Initialize Appwrite Client ─────────────────────────────────
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
