@@ -611,6 +611,96 @@ body {
 }
 
 /* ===========================================
+   NOTICES PANEL
+   =========================================== */
+
+.notices-panel {
+  margin-top: 48px;
+  width: 100%;
+  text-align: left;
+  animation: fadeInUp 0.7s ease 0.6s both;
+}
+
+.notices-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notices-title::before {
+  content: '📰';
+  font-size: 20px;
+}
+
+.notices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.notice-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.notice-card:hover {
+  border-color: var(--border);
+  transform: translateX(4px);
+  background: var(--bg-elevated);
+}
+
+.notice-header {
+  margin-bottom: 8px;
+}
+
+.notice-date {
+  font-size: 12px;
+  color: var(--gold);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.notice-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.notice-body {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.notice-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gold);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.notice-link:hover {
+  color: var(--gold-light);
+  text-decoration: underline;
+}
+
+/* ===========================================
    ANIMATIONS
    =========================================== */
 
@@ -661,20 +751,45 @@ body {
 
 @media (max-width: 480px) {
   .landing {
-    padding: 16px;
+    padding: 12px;
+    justify-content: flex-start;
+    padding-top: 40px;
   }
   
+  .target-icon {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 24px;
+  }
+
+  .landing-headline {
+    font-size: clamp(34px, 10vw, 46px);
+  }
+
+  .landing-subtitle {
+    font-size: 17px;
+  }
+
   .benefit-item {
-    padding: 16px;
+    padding: 18px 16px;
   }
   
+  .benefit-icon {
+    font-size: 24px;
+  }
+
   .benefit-text {
-    font-size: 15px;
+    font-size: 16px;
+  }
+
+  .cta-button {
+    padding: 22px 32px;
+    font-size: 18px;
   }
 
   .login-card,
   .dispatch-card {
-    padding: 24px;
+    padding: 20px;
   }
   
   .admin-header {

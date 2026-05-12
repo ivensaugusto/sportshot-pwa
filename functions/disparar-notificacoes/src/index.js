@@ -102,6 +102,20 @@ export default async ({ req, res, log, error }) => {
 
   log(`[Dispatch] Done — Sent: ${stats.sent}, Failed: ${stats.failed}, Removed: ${stats.removed}`);
 
+  // ─── Save History ────────────────────────────────────────────────
+  try {
+    const { ID } = await import('node-appwrite');
+    await databases.createDocument(DB_ID, 'notices', ID.unique(), {
+      title,
+      body,
+      url: url || null,
+      createdAt: new Date().toISOString()
+    });
+    log(`[History] Saved notification to notices collection`);
+  } catch (err) {
+    log(`[History] Failed to save notice history: ${err.message}`);
+  }
+
   return res.json({
     success: true,
     sent: stats.sent,

@@ -1,5 +1,13 @@
 import { useState, useEffect } from 'react';
-import { databases, DB_ID, COLLECTION_ID, VAPID_PUBLIC_KEY, ID } from '../lib/appwrite';
+import { databases, DB_ID, COLLECTION_ID, VAPID_PUBLIC_KEY, ID, Query } from '../lib/appwrite';
+
+type Notice = {
+  $id: string;
+  title: string;
+  body: string;
+  url: string | null;
+  createdAt: string;
+};
 
 type SubscribeState = 'idle' | 'loading' | 'success' | 'error' | 'denied' | 'unsupported';
 
@@ -17,13 +25,35 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
 export default function LandingPage() {
   const [state, setState] = useState<SubscribeState>('idle');
   const [error, setError] = useState('');
+  const [notices, setNotices] = useState<Notice[]>([]);
+  const [loadingNotices, setLoadingNotices] = useState(true);
 
   useEffect(() => {
+    // Check push support
     if (!('Notification' in window) || !('serviceWorker' in navigator) || !('PushManager' in window)) {
       setState('unsupported');
     } else if (Notification.permission === 'denied') {
       setState('denied');
+    } else if (Notification.permission === 'granted') {
+      setState('success'); // Already subscribed
     }
+
+    // Fetch notices
+    const fetchNotices = async () => {
+      try {
+        const res = await databases.listDocuments(DB_ID, 'notices', [
+          Query.orderDesc('createdAt'),
+          Query.limit(5)
+        ]);
+        setNotices(res.documents as unknown as Notice[]);
+      } catch (err) {
+        console.error('Failed to fetch notices:', err);
+      } finally {
+        setLoadingNotices(false);
+      }
+    };
+
+    fetchNotices();
   }, []);
 
   const handleSubscribe = async () => {
@@ -174,6 +204,33 @@ export default function LandingPage() {
         <p className="landing-footer" aria-label="Rodapé">
           Sportshot Clube de Tiro • Seus dados estão seguros conosco
         </p>
+
+        {/* Notícias Panel */}
+        {notices.length > 0 && (
+          <div className="notices-panel">
+            <h2 className="notices-title">Últimos Avisos</h2>
+            <div className="notices-list">
+              {notices.map((notice) => (
+                <div key={notice.$id} className="notice-card">
+                  <div className="notice-header">
+                    <span className="notice-date">
+                      {new Date(notice.createdAt).toLocaleDateString('pt-BR', { 
+                        day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' 
+                      })}
+                    </span>
+                  </div>
+                  <h3 className="notice-title">{notice.title}</h3>
+                  <p className="notice-body">{notice.body}</p>
+                  {notice.url && notice.url !== '/' && (
+                    <a href={notice.url} target="_blank" rel="noopener noreferrer" className="notice-link">
+                      Saber mais →
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
