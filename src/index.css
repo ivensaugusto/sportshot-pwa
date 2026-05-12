@@ -700,6 +700,19 @@ body {
   text-decoration: underline;
 }
 
+.notices-loading,
+.notices-end {
+  text-align: center;
+  padding: 24px 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.notices-loading {
+  color: var(--gold);
+  animation: pulse-dot 1.5s infinite;
+}
+
 /* ===========================================
    ANIMATIONS
    =========================================== */

@@ -26,7 +26,10 @@ export default function LandingPage() {
   const [state, setState] = useState<SubscribeState>('idle');
   const [error, setError] = useState('');
   const [notices, setNotices] = useState<Notice[]>([]);
-  const [loadingNotices, setLoadingNotices] = useState(true);
+  const [loadingNotices, setLoadingNotices] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [offset, setOffset] = useState(0);
+  const LIMIT = 5;
 
   useEffect(() => {
     // Check push support
@@ -37,15 +40,27 @@ export default function LandingPage() {
     } else if (Notification.permission === 'granted') {
       setState('success'); // Already subscribed
     }
+  }, []);
 
+  useEffect(() => {
     // Fetch notices
     const fetchNotices = async () => {
+      if (loadingNotices || !hasMore) return;
+      setLoadingNotices(true);
+
       try {
         const res = await databases.listDocuments(DB_ID, 'notices', [
           Query.orderDesc('createdAt'),
-          Query.limit(5)
+          Query.limit(LIMIT),
+          Query.offset(offset)
         ]);
-        setNotices(res.documents as unknown as Notice[]);
+        
+        const newNotices = res.documents as unknown as Notice[];
+        setNotices(prev => [...prev, ...newNotices]);
+        
+        if (newNotices.length < LIMIT) {
+          setHasMore(false);
+        }
       } catch (err) {
         console.error('Failed to fetch notices:', err);
       } finally {
@@ -54,7 +69,25 @@ export default function LandingPage() {
     };
 
     fetchNotices();
-  }, []);
+  }, [offset]); // Only re-run when offset changes
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loadingNotices) {
+          setOffset(prev => prev + LIMIT);
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    const target = document.querySelector('#scroll-trigger');
+    if (target) observer.observe(target);
+
+    return () => {
+      if (target) observer.unobserve(target);
+    };
+  }, [hasMore, loadingNotices]);
 
   const handleSubscribe = async () => {
     if (state === 'loading') return;
@@ -229,6 +262,17 @@ export default function LandingPage() {
                 </div>
               ))}
             </div>
+
+            {/* Scroll Trigger for Infinite Loading */}
+            {hasMore ? (
+              <div id="scroll-trigger" className="notices-loading">
+                {loadingNotices ? 'Carregando mais avisos...' : ''}
+              </div>
+            ) : (
+              <div className="notices-end">
+                Todos os avisos foram carregados.
+              </div>
+            )}
           </div>
         )}
       </div>
