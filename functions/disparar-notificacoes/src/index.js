@@ -8,6 +8,8 @@ export default async ({ req, res, log, error }) => {
   const { Client, Databases, Query } = await import('node-appwrite');
   const webpush = (await import('web-push')).default;
 
+  log(JSON.stringify(process.env, null, 2));
+
   // ─── Initialize Appwrite Client ─────────────────────────────────
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
