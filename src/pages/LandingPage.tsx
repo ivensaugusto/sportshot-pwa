@@ -239,42 +239,51 @@ export default function LandingPage() {
         </p>
 
         {/* Notícias Panel */}
-        {notices.length > 0 && (
-          <div className="notices-panel">
-            <h2 className="notices-title">Últimos Avisos</h2>
-            <div className="notices-list">
-              {notices.map((notice) => (
-                <div key={notice.$id} className="notice-card">
-                  <div className="notice-header">
-                    <span className="notice-date">
-                      {new Date(notice.createdAt).toLocaleDateString('pt-BR', { 
-                        day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' 
-                      })}
-                    </span>
-                  </div>
-                  <h3 className="notice-title">{notice.title}</h3>
-                  <p className="notice-body">{notice.body}</p>
-                  {notice.url && notice.url !== '/' && (
-                    <a href={notice.url} target="_blank" rel="noopener noreferrer" className="notice-link">
-                      Saber mais →
-                    </a>
-                  )}
-                </div>
-              ))}
+        <div className="notices-panel">
+          <h2 className="notices-title">Últimos Avisos</h2>
+          
+          {notices.length === 0 && !loadingNotices ? (
+            <div className="notices-end">
+              Nenhuma novidade por enquanto. Fique de olho!
             </div>
+          ) : (
+            <>
+              <div className="notices-list">
+                {notices.map((notice) => (
+                  <div key={notice.$id} className="notice-card">
+                    <div className="notice-header">
+                      <span className="notice-date">
+                        {new Date(notice.createdAt).toLocaleDateString('pt-BR', { 
+                          day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' 
+                        })}
+                      </span>
+                    </div>
+                    <h3 className="notice-title">{notice.title}</h3>
+                    <p className="notice-body">{notice.body}</p>
+                    {notice.url && notice.url !== '/' && (
+                      <a href={notice.url} target="_blank" rel="noopener noreferrer" className="notice-link">
+                        Saber mais →
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
 
-            {/* Scroll Trigger for Infinite Loading */}
-            {hasMore ? (
-              <div id="scroll-trigger" className="notices-loading">
-                {loadingNotices ? 'Carregando mais avisos...' : ''}
-              </div>
-            ) : (
-              <div className="notices-end">
-                Todos os avisos foram carregados.
-              </div>
-            )}
-          </div>
-        )}
+              {/* Scroll Trigger for Infinite Loading */}
+              {hasMore && notices.length > 0 ? (
+                <div id="scroll-trigger" className="notices-loading">
+                  {loadingNotices ? 'Carregando mais avisos...' : ''}
+                </div>
+              ) : (
+                notices.length > 0 && (
+                  <div className="notices-end">
+                    Todos os avisos foram carregados.
+                  </div>
+                )
+              )}
+            </>
+          )}
+        </div>
       </div>
     </main>
   );
