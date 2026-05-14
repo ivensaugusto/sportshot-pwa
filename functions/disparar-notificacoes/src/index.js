@@ -75,7 +75,7 @@ export default async ({ req, res, log, error }) => {
   log(`[Dispatch] Encontrados ${allDocuments.length} inscritos`);
 
   // ─── Dispatch notifications ───────────────────────────────────────
-  const finalUrl = url || 'https://sportshot.simplemsg.net.br/';
+  const finalUrl = url || '/';
   const notifPayload = JSON.stringify({ title, body, url: finalUrl });
   const stats = { sent: 0, failed: 0, removed: 0 };
   const toDelete = [];

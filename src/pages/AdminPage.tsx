@@ -72,7 +72,7 @@ export default function AdminPage() {
         JSON.stringify({ 
           title: title.trim(), 
           body: body.trim(),
-          url: url.trim() || 'https://sportshot.simplemsg.net.br/',
+          url: url.trim() || '/',
           sender: user?.name || user?.email || 'Administrador'
         }),
         false
