@@ -808,6 +808,7 @@ body {
     padding: 60px 20px;
     border-right: none;
     border-bottom: 1px solid var(--border-subtle);
+    min-height: auto;
   }
 
   .mural-sidebar {
@@ -821,13 +822,31 @@ body {
 
 @media (max-width: 480px) {
   .landing {
-    padding: 40px 16px;
+    padding: 60px 16px 40px;
   }
   
   .target-icon {
-    width: 80px;
-    height: 80px;
-    margin-bottom: 24px;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 32px;
+  }
+
+  .success-card {
+    padding: 40px 24px;
+  }
+
+  .success-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+  }
+
+  .success-title {
+    font-size: 26px;
+    margin-bottom: 16px;
+  }
+
+  .success-text {
+    font-size: 17px;
   }
 
   .landing-headline {
