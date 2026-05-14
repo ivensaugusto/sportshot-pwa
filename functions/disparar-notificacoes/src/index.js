@@ -13,7 +13,7 @@ export default async ({ req, res, log, error }) => {
 
   // ─── Initialize Appwrite Client ─────────────────────────────────
   const client = new Client()
-    .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
+    .setEndpoint('https://apw.simplemsg.net.br/v1')
     .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
     .setKey(process.env.APPWRITE_API_KEY);
 
@@ -121,7 +121,7 @@ export default async ({ req, res, log, error }) => {
   log('--- Salvando histórico no mural ---');
   let historySaved = false;
   try {
-    await databases.createDocument(DB_ID, 'notices', ID.unique(), {
+    const newNotice = await databases.createDocument(DB_ID, 'notices', ID.unique(), {
       title,
       body,
       url: finalUrl,
@@ -130,7 +130,7 @@ export default async ({ req, res, log, error }) => {
     }, [
       Permission.read(Role.any())
     ]);
-    log(`[History] Aviso salvo com sucesso na coleção notices`);
+    log(`[History] Aviso salvo com sucesso na coleção notices (ID: ${newNotice.$id})`);
     historySaved = true;
   } catch (err) {
     error(`[History] Falha ao salvar no mural: ${err.message}`);
