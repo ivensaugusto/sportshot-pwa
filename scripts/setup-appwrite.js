@@ -75,7 +75,56 @@ async function main() {
   await new Promise((r) => setTimeout(r, 2000));
   console.log('✅ Atributos criados!\n');
 
-  // ─── 4. Create Admin User ─────────────────────────────────────
+  // ─── 4. Create Notices Collection ─────────────────────────────
+  console.log('📋 Criando collection notices...');
+  try {
+    const noticesCollection = await databases.createCollection(
+      db.$id,
+      'notices',
+      'notices',
+      [
+        // Anyone can read
+        Permission.read(Role.any()),
+        // Only team:admin can create/update/delete
+        Permission.read(Role.team('admin')),
+        Permission.create(Role.team('admin')),
+        Permission.update(Role.team('admin')),
+        Permission.delete(Role.team('admin')),
+      ]
+    );
+    console.log(`✅ Collection criada: ${noticesCollection.$id}\n`);
+
+    console.log('🔧 Criando atributos para notices...');
+    await databases.createStringAttribute(db.$id, 'notices', 'title', 255, true);
+    console.log('  ✓ title');
+    await new Promise((r) => setTimeout(r, 1000));
+
+    await databases.createStringAttribute(db.$id, 'notices', 'body', 2048, true);
+    console.log('  ✓ body');
+    await new Promise((r) => setTimeout(r, 1000));
+
+    await databases.createStringAttribute(db.$id, 'notices', 'url', 2048, false);
+    console.log('  ✓ url');
+    await new Promise((r) => setTimeout(r, 1000));
+
+    await databases.createStringAttribute(db.$id, 'notices', 'createdAt', 64, true);
+    console.log('  ✓ createdAt');
+    await new Promise((r) => setTimeout(r, 1000));
+
+    await databases.createStringAttribute(db.$id, 'notices', 'sender', 255, false);
+    console.log('  ✓ sender');
+    await new Promise((r) => setTimeout(r, 1000));
+
+    console.log('✅ Atributos de notices criados!\n');
+  } catch (err) {
+    if (err.code === 409) {
+      console.log('⚠️  Collection notices já existe, pulando...');
+    } else {
+      throw err;
+    }
+  }
+
+  // ─── 5. Create Admin User ─────────────────────────────────────
   console.log('👤 Criando usuário administrador...');
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@sportshot.com.br';
   const adminPassword = process.env.ADMIN_PASSWORD || 'Sportshot@2024!';
@@ -99,6 +148,7 @@ async function main() {
   console.log('─'.repeat(50));
   console.log(`DATABASE_ID=${db.$id}`);
   console.log(`COLLECTION_ID=${collection.$id}`);
+  console.log(`NOTICES_COLLECTION_ID=notices`);
   console.log('─'.repeat(50));
   console.log('\n📝 Adicione estes valores no seu .env e nas variáveis da Appwrite Function!');
 }
