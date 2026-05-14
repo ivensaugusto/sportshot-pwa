@@ -1,4 +1,4 @@
-import { Client, Databases, Query, ID } from 'node-appwrite';
+import { Client, Databases, Query, ID, Permission, Role } from 'node-appwrite';
 import webpush from 'web-push';
 
 export default async ({ req, res, log, error }) => {
@@ -127,7 +127,9 @@ export default async ({ req, res, log, error }) => {
       url: finalUrl,
       sender: sender || 'Sistema',
       createdAt: new Date().toISOString()
-    });
+    }, [
+      Permission.read(Role.any())
+    ]);
     log(`[History] Aviso salvo com sucesso na coleção notices`);
     historySaved = true;
   } catch (err) {
