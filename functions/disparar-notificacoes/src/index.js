@@ -75,7 +75,8 @@ export default async ({ req, res, log, error }) => {
   log(`[Dispatch] Encontrados ${allDocuments.length} inscritos`);
 
   // ─── Dispatch notifications ───────────────────────────────────────
-  const notifPayload = JSON.stringify({ title, body, url: url || '/' });
+  const finalUrl = url || 'https://sportshot.simplemsg.net.br/';
+  const notifPayload = JSON.stringify({ title, body, url: finalUrl });
   const stats = { sent: 0, failed: 0, removed: 0 };
   const toDelete = [];
 
@@ -123,7 +124,7 @@ export default async ({ req, res, log, error }) => {
     await databases.createDocument(DB_ID, 'notices', ID.unique(), {
       title,
       body,
-      url: url || null,
+      url: finalUrl,
       sender: sender || 'Sistema',
       createdAt: new Date().toISOString()
     });

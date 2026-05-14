@@ -287,7 +287,7 @@ export default function LandingPage() {
                     </div>
                     <h3 className="notice-title">{notice.title}</h3>
                     <p className="notice-body">{notice.body}</p>
-                    {notice.url && notice.url !== '/' && (
+                    {notice.url && notice.url !== '/' && notice.url !== 'https://sportshot.simplemsg.net.br/' && (
                       <a href={notice.url} target="_blank" rel="noopener noreferrer" className="notice-link">
                         Saber mais →
                       </a>
