@@ -1,88 +1,125 @@
-# Manual de Uso: Sistema Web Push Sportshot
+# Manual de Uso Técnico: Sistema Web Push Sportshot
 
-Bem-vindo ao manual do sistema de notificações **Sportshot PWA**. Este documento explica detalhadamente como acessar, usar e gerenciar sua nova plataforma de envios de mensagens gratuitas via Web Push.
-
----
-
-## 1. Como Funciona o Sistema?
-
-O sistema foi criado para ser um canal direto e sem custos de disparo entre o Clube de Tiro Sportshot e seus clientes. Ele funciona em duas pontas:
-1. **O Cliente (Página Pública):** Acessa o site, clica em um botão e permite que o navegador (celular ou computador) receba notificações do clube. O dispositivo dele fica salvo no banco de dados.
-2. **O Administrador (Painel Privado):** Acessa uma área restrita, digita a mensagem desejada e dispara. O sistema (via Appwrite) envia a mensagem em massa para todos os clientes inscritos instantaneamente.
+Bem-vindo ao manual técnico do **Sportshot PWA**. Este documento é voltado para desenvolvedores e administradores de infraestrutura (como você) e detalha o funcionamento, arquitetura, esquema do banco de dados, storage e processo de integração contínua (CI/CD) para manutenção da plataforma.
 
 ---
 
-## 2. Acessos e URLs Importantes
+## 1. Arquitetura Geral do Sistema
 
-Guarde estes links, eles são a base da sua operação:
-
-- **Site Público (Para os clientes):** 
-  👉 [https://sportshot.simplemsg.net.br](https://sportshot.simplemsg.net.br)
-  *Compartilhe este link no WhatsApp, Instagram e campanhas do clube para captar inscritos.*
-
-- **Painel Administrativo (Para você disparar mensagens):** 
-  👉 [https://sportshot.simplemsg.net.br/admin](https://sportshot.simplemsg.net.br/admin)
-
-- **Painel do Banco de Dados (Appwrite):** 
-  👉 [https://apw.simplemsg.net.br](https://apw.simplemsg.net.br)
-  *(Acesso infraestrutural: Onde ficam salvos os tokens técnicos dos usuários e a configuração do servidor de disparos).*
+O sistema é construído sobre uma arquitetura moderna e de alto desempenho:
+1. **Frontend (React + Vite + TypeScript)**: Um Progressive Web App (PWA) leve, otimizado para celulares e desktops, que realiza o registro de assinaturas Web Push e consome APIs do Appwrite em tempo real.
+2. **Backend (Appwrite Server & Appwrite Functions)**:
+   - **Database**: Armazena as assinaturas de push (coleção `push_subscribers`) e o histórico de avisos enviados (coleção `notices`).
+   - **Storage**: Hospeda os arquivos de imagens enviados pelo administrador (bucket `notices-images`).
+   - **Functions**: A função `disparar-notificacoes` é responsável por processar o envio em lote via Web Push de forma assíncrona, limpar tokens inválidos e registrar o mural.
+3. **Service Worker (`sw.js`)**: Executado em plano de fundo no dispositivo do cliente para escutar eventos de Push do sistema operacional, renderizar notificações ricas (incluindo imagens) e gerenciar redirecionamentos personalizados ao clicar.
 
 ---
 
-## 3. Como Disparar uma Notificação (Passo a Passo)
+## 2. Fluxo Técnico de Inserção de Imagens
 
-Sempre que quiser avisar seus clientes sobre um torneio, promoção ou evento:
+O sistema utiliza a API do Appwrite Storage para permitir o envio nativo de arquivos de imagens pelo administrador, integrando-a com as notificações Web Push ricas:
 
-1. Acesse o **Painel Administrativo**: [https://sportshot.simplemsg.net.br/admin](https://sportshot.simplemsg.net.br/admin)
-2. Faça o login com as credenciais padrão:
-   - **E-mail:** `admin@sportshot.com.br`
-   - **Senha:** `Sportshot@2024!`
-3. Na tela de disparo, preencha:
-   - **Título da Notificação** (Ex: *Torneio de Tiro Esportivo!*)
-   - **Mensagem** (Ex: *Inscreva-se agora, vagas limitadas para este fim de semana.*)
-4. Clique em **"🚀 Disparar para Todos"**.
-5. Aguarde alguns segundos. O sistema mostrará um resumo verde informando quantos envios tiveram sucesso. As notificações começarão a aparecer nos celulares e computadores dos clientes inscritos.
+```mermaid
+sequenceDiagram
+    actor Admin as Painel Admin (/admin)
+    participant Storage as Appwrite Storage (notices-images)
+    participant Function as Appwrite Function (disparar-notificacoes)
+    participant DB as Appwrite Database (notices)
+    participant Client as Dispositivo do Usuário (Service Worker)
 
-> **Dica de Limpeza Automática:** Se um cliente trocar de celular ou revogar a permissão no navegador, o sistema detectará a falha no próximo disparo e excluirá aquele cliente automaticamente do banco de dados, mantendo sua lista sempre limpa e atualizada!
-
----
-
-## 4. Testando o Sistema Agora Mesmo
-
-Quer ver funcionando na prática? Siga este teste rápido:
-1. Pelo seu próprio celular ou computador, abra o [Site Público](https://sportshot.simplemsg.net.br).
-2. Clique no botão dourado **"🔔 Quero receber os avisos"**.
-3. O navegador vai perguntar se você permite notificações. Clique em **Permitir**.
-4. A tela mostrará uma mensagem de sucesso ("Você está dentro!").
-5. Agora abra o **Painel Administrativo**, faça login e envie uma mensagem de teste. Ela aparecerá na tela do seu dispositivo!
+    Admin->>Admin: Seleciona imagem local e gera Preview (URL.createObjectURL)
+    Admin->>Storage: Envia arquivo via storage.createFile()
+    Storage-->>Admin: Retorna ID do arquivo e URL Pública (getFileView)
+    Admin->>Function: Dispara execução enviando título, mensagem, url e URL da imagem
+    Function->>Client: Envia Web Push contendo payload JSON com a URL da imagem
+    Client->>Client: Service Worker exibe notificação rica com imagem
+    Function->>DB: Salva aviso contendo campo "image"
+    DB-->>Client: Sincronização em tempo real (Realtime API) exibe imagem no Mural
+```
 
 ---
 
-## 5. Como Atualizar o Sistema (CI/CD Automático)
+## 3. Estrutura do Banco de Dados e Storage
 
-A infraestrutura foi configurada para que você não precise acessar o servidor Hetzner manualmente se quiser mudar um texto ou a cor de um botão no site.
+As coleções estão localizadas no banco de dados `sportshot-db`.
 
-O sistema possui integração contínua (CI/CD) via Portainer Webhook ligada ao seu GitHub:
-1. Altere o código fonte do sistema no seu computador.
-2. Faça o commit e envie para o GitHub:
-   ```bash
-   git add .
-   git commit -m "Alterando texto da página inicial"
-   git push origin master
-   ```
-3. **Pronto!** O GitHub vai avisar o seu servidor (Portainer) imediatamente. O servidor vai baixar a nova versão, reconstruir o sistema e colocar no ar sem que o site caia, de forma 100% automática (em cerca de 1 minuto a mudança já estará visível online).
+### Coleção: `notices` (Histórico de Avisos)
+Armazena todos os disparos que aparecem no Mural de Avisos da página inicial.
+- **`title`**: String (255, obrigatório) — Título da notificação.
+- **`body`**: String (2048, obrigatório) — Conteúdo/mensagem do aviso.
+- **`url`**: String (2048, opcional) — Link de destino personalizado (default `/`).
+- **`sender`**: String (255, opcional) — Nome/e-mail do administrador que disparou.
+- **`image`**: String (2048, opcional) — Link público da imagem hospedada no Appwrite Storage.
+- **`createdAt`**: String (64, obrigatório) — Timestamp ISO da criação.
 
----
-
-## 6. Alterando a Senha do Administrador
-
-Para a segurança do sistema, recomenda-se alterar a senha inicial de disparo.
-1. Acesse o [Painel Appwrite](https://apw.simplemsg.net.br).
-2. Entre no projeto **Sportshot**.
-3. No menu lateral esquerdo, clique em **Auth** (Autenticação).
-4. Encontre o usuário `admin@sportshot.com.br` na lista e clique nele.
-5. Na aba de configurações do usuário, você poderá atualizar a senha. A nova senha será exigida no próximo login do `/admin`.
+### Storage Bucket: `notices-images` (Armazenamento de Imagens)
+Diretório de arquivos onde são armazenadas as imagens enviadas no painel.
+- **Bucket ID**: `notices-images`
+- **Permissões de Leitura**: Pública (`Role.any()`) para que os navegadores carreguem as imagens nas notificações e no mural.
+- **Permissões de Escrita**: Permissões públicas/usuários autenticados (`Role.any()`) para viabilizar o upload direto via SDK Web do frontend do painel administrativo.
+- **Segurança de Arquivo (File Security)**: Desabilitado (o controle é centralizado no nível do bucket).
 
 ---
 
-**Suporte Tecnológico:** Qualquer alteração complexa de infraestrutura Docker ou Lógica de Disparo via Web Push API, consulte o repositório GitHub para verificar o código fonte (`sw.js` e a Appwrite Function em `/functions`).
+## 4. Scripts de Setup & Migração do Appwrite
+
+Para atualizar ou configurar a infraestrutura técnica em novos servidores, use os scripts presentes na pasta `/scratch` e `/scripts` (requer a variável `APPWRITE_API_KEY` definida no ambiente):
+
+### A. Setup Inicial Completo (Banco e Estrutura)
+Cria o banco de dados `sportshot-db`, o usuário administrador inicial e a coleção de inscrições:
+```bash
+$env:APPWRITE_API_KEY="SUA_CHAVE"; node scripts/setup-appwrite.js
+```
+
+### B. Migração de Imagem & Storage (Atualização de Esquema)
+Executa a migração do banco de dados adicionando o atributo `image` à coleção `notices` e cria o bucket de armazenamento `notices-images` no Appwrite Storage de forma automática:
+```bash
+$env:APPWRITE_API_KEY="SUA_CHAVE"; node scratch/update-schema-image.js
+```
+
+---
+
+## 5. Como Atualizar o Sistema Online (Pipeline de CI/CD)
+
+A infraestrutura na VPS Hetzner está configurada com integração contínua (CI/CD) via Portainer Webhook ligada diretamente ao repositório GitHub.
+
+Sempre que realizar modificações de código localmente e testar em ambiente de desenvolvimento, siga estes passos para colocar as alterações online em produção:
+
+### 1. Empacotar a Appwrite Function (se houver alteração em `/functions`)
+Se você alterou a lógica de backend em `functions/disparar-notificacoes/src/index.js`, gere novamente o pacote de deploy:
+- **No Windows (PowerShell)**:
+  ```powershell
+  tar -czf function-deploy.tar.gz -C functions/disparar-notificacoes package.json package-lock.json src
+  ```
+- **Fazer upload do novo backend**:
+  ```powershell
+  node scripts/deploy-function.mjs
+  ```
+
+### 2. Enviar Modificações do Frontend para o GitHub
+Para que as alterações no painel do administrador, mural ou estilizações entrem no ar:
+```bash
+# Adicionar todas as alterações
+git add .
+
+# Realizar o commit
+git commit -m "feat: descrição curta da sua modificação"
+
+# Enviar para a branch de produção
+git push origin master
+```
+
+### 3. Build Automático no Servidor
+Ao realizar o `git push origin master`, o GitHub aciona o Portainer na sua VPS via Webhook. O Portainer irá:
+- Baixar a versão mais recente do repositório.
+- Executar o container Builder (`npm run build` interno no Dockerfile).
+- Substituir o container de produção (`Nginx`) sem queda no serviço.
+- Em cerca de 1 minuto, a alteração estará online de forma 100% automatizada.
+
+---
+
+## 6. Configurações de Deploy (Nginx & Docker)
+O frontend é servido via Docker com Nginx. O arquivo [nginx.conf](file:///c:/Users/ivens/OneDrive/Desktop/_Algoritimos/sportshot.simplemsg.net.br/nginx.conf) está configurado para habilitar cache agressivo de Service Workers e ativos estáticos, além de redirecionar todas as rotas internas para `index.html` para compatibilidade com o React Router.
+
+Qualquer alteração em portas ou proxies reversos virtuais deve ser gerenciada no arquivo [docker-compose.yml](file:///c:/Users/ivens/OneDrive/Desktop/_Algoritimos/sportshot.simplemsg.net.br/docker-compose.yml).
