@@ -1,4 +1,4 @@
-import { Client, Account, Databases, Functions, ID, Permission, Role, Query } from 'appwrite';
+import { Client, Account, Databases, Functions, ID, Permission, Role, Query, Storage } from 'appwrite';
 
 export const client = new Client()
   .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT)
@@ -7,6 +7,7 @@ export const client = new Client()
 export const account = new Account(client);
 export const databases = new Databases(client);
 export const functions = new Functions(client);
+export const storage = new Storage(client);
 export { ID, Permission, Role, Query };
 
 export const DB_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;

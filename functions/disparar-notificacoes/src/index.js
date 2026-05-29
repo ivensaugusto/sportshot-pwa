@@ -28,7 +28,7 @@ export default async ({ req, res, log, error }) => {
     return res.json({ error: 'Payload inválido. Envie JSON com { title, body }.' }, 400);
   }
 
-  const { title, body, url, sender } = payload;
+  const { title, body, url, sender, image } = payload;
   if (!title || !body) {
     return res.json({ error: 'Os campos "title" e "body" são obrigatórios.' }, 400);
   }
@@ -76,7 +76,7 @@ export default async ({ req, res, log, error }) => {
 
   // ─── Dispatch notifications ───────────────────────────────────────
   const finalUrl = url || '/';
-  const notifPayload = JSON.stringify({ title, body, url: finalUrl });
+  const notifPayload = JSON.stringify({ title, body, url: finalUrl, image: image || '' });
   const stats = { sent: 0, failed: 0, removed: 0 };
   const toDelete = [];
 
@@ -126,6 +126,7 @@ export default async ({ req, res, log, error }) => {
       body,
       url: finalUrl,
       sender: sender || 'Sistema',
+      image: image || '',
       createdAt: new Date().toISOString()
     }, [
       Permission.read(Role.any())

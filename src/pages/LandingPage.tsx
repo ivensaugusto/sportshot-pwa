@@ -7,6 +7,7 @@ type Notice = {
   body: string;
   url: string | null;
   sender: string | null;
+  image?: string | null;
   createdAt: string;
 };
 
@@ -287,6 +288,16 @@ export default function LandingPage() {
                     </div>
                     <h3 className="notice-title">{notice.title}</h3>
                     <p className="notice-body">{notice.body}</p>
+                    {notice.image && notice.image.trim() !== '' && (
+                      <img 
+                        src={notice.image} 
+                        alt={notice.title} 
+                        className="notice-image" 
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none';
+                        }} 
+                      />
+                    )}
                     {notice.url && notice.url !== '/' && notice.url !== 'https://sportshot.simplemsg.net.br/' && (
                       <a href={notice.url} target="_blank" rel="noopener noreferrer" className="notice-link">
                         Saber mais →

@@ -3,40 +3,41 @@
 ## Project Overview
 Sportshot is a Progressive Web App (PWA) for notification management and communication for a shooting club. It uses Appwrite for the backend and React (Vite) for the frontend.
 
-## Current Status (2026-05-14)
-- **Message Board (Mural)**: Agora exibe o remetente (nome/e-mail) e data/hora.
-- **Push Notifications**: Funcional, com registro robusto de histórico no banco de dados.
-- **Admin Panel**: Permite disparar notificações enviando o nome do administrador logado como remetente.
+## Current Status (2026-05-28)
+- **Message Board (Mural) & Rich Push**: Agora suporta inserção de imagens nas mensagens enviadas pelo administrador. As imagens aparecem formatadas de maneira premium no mural e são exibidas diretamente nos dispositivos dos usuários através do Web Push.
+- **Admin Panel**: Inclui campo para URL de imagem com preview em tempo real (evita o envio de links quebrados).
+- **Push Notifications**: Suporte completo para imagens ricas no Service Worker (`sw.js`).
+- **Database Schema**: O atributo `image` foi adicionado à coleção `notices`.
 
 ## Key Components
 
 ### Frontend (`/src`)
-- `pages/LandingPage.tsx`: Mural atualizado para exibir o campo `sender`.
-- `pages/AdminPage.tsx`: Payload de disparo atualizado para incluir `sender`.
-- `index.css`: Estilização adicionada para o nome do remetente no mural.
+- `pages/LandingPage.tsx`: Mural atualizado para exibir imagens associadas aos avisos de forma elegante.
+- `pages/AdminPage.tsx`: Formulário atualizado para incluir campo de URL de imagem, preview visual interativo e payload de disparo incluindo a imagem.
+- `index.css`: Estilização premium adicionada para imagens no mural (cantos arredondados, transições de zoom suave ao passar o mouse e sombra) e para o preview no painel do administrador.
 
 ### Backend (`/functions`)
-- `disparar-notificacoes`: Atualizada para salvar o campo `sender` e retornar erro explícito caso a gravação no histórico falhe.
+- `disparar-notificacoes`: Atualizada para receber o campo `image`, propagar no payload do Web Push e persistir na coleção `notices` do banco de dados.
 
-### Scripts (`/scripts` & `/scratch`)
-- `scripts/setup-appwrite.js`: Inclui agora o atributo `sender` na coleção `notices`.
-- `scratch/update-schema.js`: **[CRÍTICO]** Script para atualizar o banco de dados existente adicionando a coluna `sender`.
+### Scripts & Migrações (`/scratch`)
+- `scratch/update-schema-image.js`: **[CRÍTICO]** Script de migração para adicionar o atributo `image` (tipo String, tamanho 2048, opcional) à coleção `notices` e criar o bucket de Storage `notices-images` no Appwrite.
 
 ## How to Continue (IMPORTANT)
 
-Se for continuar em outro PC, siga estas etapas na ordem:
+Se for continuar em outro PC ou ambiente de homologação, siga estas etapas na ordem:
 
 1.  **Configurar Variáveis**: Certifique-se de ter `APPWRITE_API_KEY` disponível.
 2.  **Atualizar Banco de Dados**:
-    Execute o script para adicionar o novo atributo `sender` à coleção `notices`:
+    Execute o script para adicionar os novos atributos à coleção `notices` (se ainda não existirem):
     ```bash
-    # Windows
+    # Adicionar campo 'sender'
     $env:APPWRITE_API_KEY="SUA_CHAVE"; node scratch/update-schema.js
-    # Linux/Mac
-    APPWRITE_API_KEY="SUA_CHAVE" node scratch/update-schema.js
+    
+    # Adicionar campo 'image' e Criar Bucket 'notices-images' no Storage
+    $env:APPWRITE_API_KEY="SUA_CHAVE"; node scratch/update-schema-image.js
     ```
 3.  **Fazer Deploy da Função**:
-    A função `disparar-notificacoes` foi alterada e precisa ser enviada novamente para o Appwrite.
+    Como a função `disparar-notificacoes` foi alterada para suportar a imagem, faça o deploy novamente no Appwrite:
     ```bash
     node scripts/deploy-function.mjs
     ```
@@ -45,8 +46,8 @@ Se for continuar em outro PC, siga estas etapas na ordem:
     npm run build
     ```
 
-## Recent Changes (2026-05-14)
-- **Salvamento de Remetente**: Adicionado campo `sender` em todas as mensagens enviadas.
-- **Correção de Histórico**: Corrigida a lógica da Appwrite Function para garantir que a mensagem seja gravada no mural antes de retornar sucesso.
-- **Feedback de Erro**: O admin agora recebe um aviso se a notificação foi enviada mas o registro no mural falhou.
-- **Visual do Mural**: Adicionada a exibição "por [Nome]" em cada aviso do mural.
+## Recent Changes (2026-05-28)
+- **Inserção de Imagens**: Suporte completo para inclusão de imagens nas mensagens enviadas.
+- **Preview em Tempo Real**: O administrador agora vê instantaneamente como a imagem fica antes de disparar o envio.
+- **Web Push Rico**: Envio de payload estendido para o Service Worker com suporte a exibição de imagens nas notificações nativas do sistema operacional/dispositivo.
+- **Mural com Design Premium**: Renderização das imagens dos avisos no mural com bordas sutis douradas e efeito parallax suave ao passar o mouse.

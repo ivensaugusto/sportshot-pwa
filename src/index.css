@@ -799,6 +799,52 @@ body {
    RESPONSIVE
    =========================================== */
 
+/* ===========================================
+   IMAGE ATTRIBUTE PREMIUM STYLES
+   =========================================== */
+.notice-image {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-top: 14px;
+  border: 1px solid var(--border-subtle);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.notice-card:hover .notice-image {
+  transform: scale(1.02);
+  border-color: rgba(201, 168, 76, 0.4);
+}
+
+.image-preview-container {
+  margin-top: 14px;
+  padding: 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.preview-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admin-image-preview {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
 @media (max-width: 1024px) {
   .landing-page-container {
     flex-direction: column;

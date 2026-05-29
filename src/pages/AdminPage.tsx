@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { account, functions, FUNCTION_ID } from '../lib/appwrite';
+import { account, functions, FUNCTION_ID, storage } from '../lib/appwrite';
 import type { Models } from 'appwrite';
 
 type SendState = 'idle' | 'loading' | 'success' | 'error';
@@ -22,6 +22,8 @@ export default function AdminPage() {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [url, setUrl] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState('');
   const [sendState, setSendState] = useState<SendState>('idle');
   const [result, setResult] = useState<DispatchResult | null>(null);
   const [sendError, setSendError] = useState('');
@@ -67,13 +69,35 @@ export default function AdminPage() {
     setSendError('');
 
     try {
+      let finalImageUrl = '';
+
+      if (imageFile) {
+        try {
+          // Upload file using unique ID
+          const uploaded = await storage.createFile(
+            'notices-images',
+            'unique()',
+            imageFile
+          );
+          
+          // Get direct preview/view URL from Appwrite
+          finalImageUrl = storage.getFileView('notices-images', uploaded.$id).toString();
+        } catch (uploadErr: unknown) {
+          const msg = uploadErr instanceof Error ? uploadErr.message : 'Falha no upload da imagem';
+          setSendError(`Erro ao fazer upload da imagem: ${msg}`);
+          setSendState('error');
+          return;
+        }
+      }
+
       const execution = await functions.createExecution(
         FUNCTION_ID,
         JSON.stringify({ 
           title: title.trim(), 
           body: body.trim(),
           url: url.trim() || '/',
-          sender: user?.name || user?.email || 'Administrador'
+          sender: user?.name || user?.email || 'Administrador',
+          image: finalImageUrl
         }),
         false
       );
@@ -85,6 +109,10 @@ export default function AdminPage() {
         setTitle('');
         setBody('');
         setUrl('');
+        setImageFile(null);
+        setImagePreview('');
+        const fileInput = document.getElementById('notif-image') as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
       } else {
         setSendError(`Erro na execução: ${execution.status}`);
         setSendState('error');
@@ -244,6 +272,36 @@ export default function AdminPage() {
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="Ex: https://forms.gle/... ou https://seusite.com/evento"
               />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="notif-image" className="form-label">Imagem de Ilustração (Opcional)</label>
+              <input
+                id="notif-image"
+                type="file"
+                accept="image/*"
+                className="form-input"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setImageFile(file);
+                    setImagePreview(URL.createObjectURL(file));
+                  } else {
+                    setImageFile(null);
+                    setImagePreview('');
+                  }
+                }}
+              />
+              {imagePreview && (
+                <div className="image-preview-container">
+                  <span className="preview-label">Pré-visualização da imagem:</span>
+                  <img 
+                    src={imagePreview} 
+                    alt="Preview" 
+                    className="admin-image-preview" 
+                  />
+                </div>
+              )}
             </div>
 
             <button
