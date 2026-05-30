@@ -232,6 +232,9 @@ html, body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: -0.025em;
+  max-width: 15ch;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .landing-headline span {
@@ -243,12 +246,15 @@ html, body {
 }
 
 .landing-subtitle {
-  font-size: 28px; /* Giant Subtitle for ultra-high legibility */
+  font-size: 30px; /* Giant Subtitle for ultra-high legibility */
   font-weight: 400;
   color: var(--text-secondary);
   line-height: 1.7;
   margin-bottom: 40px;
   animation: fadeInUp 0.7s ease 0.3s both;
+  max-width: 35ch;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Benefits (Spacious and Larger font) */
@@ -287,6 +293,7 @@ html, body {
   color: var(--text-secondary);
   font-weight: 600;
   line-height: 1.5;
+  max-width: 30ch;
 }
 
 /* Giant CTA Button (Large tátil area) */
@@ -359,6 +366,9 @@ html, body {
   font-size: 22px; /* Giant success text body */
   color: var(--text-secondary);
   line-height: 1.7;
+  max-width: 32ch;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .error-banner {
@@ -465,6 +475,7 @@ html, body {
   color: var(--text-primary);
   margin-bottom: 10px;
   line-height: 1.35;
+  max-width: 25ch;
 }
 
 .notice-body {
@@ -472,6 +483,7 @@ html, body {
   color: var(--text-secondary);
   line-height: 1.65;
   white-space: pre-wrap;
+  max-width: 45ch;
 }
 
 /* 🖼️ UN-CROPPED Notice Image Premium Styles */
@@ -617,12 +629,18 @@ html, body {
   font-size: 30px; /* Giant admin login title */
   font-weight: 900;
   color: var(--text-primary);
+  max-width: 15ch;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .login-subtitle {
   font-size: 18px; /* Giant subtitle */
   color: var(--text-muted);
   margin-top: 4px;
+  max-width: 25ch;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .form-group {
@@ -635,6 +653,7 @@ html, body {
   font-weight: 800;
   color: var(--text-secondary);
   margin-bottom: 10px;
+  max-width: 30ch;
 }
 
 .form-input {
@@ -739,12 +758,14 @@ html, body {
   font-weight: 900;
   color: var(--text-primary);
   margin-bottom: 6px;
+  max-width: 20ch;
 }
 
 .dispatch-subtitle {
   font-size: 18px; /* Giant dispatch subtitle */
   color: var(--text-muted);
   margin-top: 2px;
+  max-width: 35ch;
 }
 
 .send-button {
