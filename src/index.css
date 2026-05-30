@@ -117,9 +117,9 @@ html, body {
 }
 
 .spinner {
-  width: 22px;
-  height: 22px;
-  border: 2.5px solid rgba(10, 10, 11, 0.3);
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(10, 10, 11, 0.3);
   border-top-color: #0A0A0B;
   border-radius: 50%;
   animation: spin 0.75s linear infinite;
@@ -197,7 +197,7 @@ html, body {
 }
 
 .logo-badge-text {
-  font-size: 14px;
+  font-size: 15px; /* Enlarged badge text */
   font-weight: 700;
   color: var(--gold);
   letter-spacing: 0.08em;
@@ -219,18 +219,18 @@ html, body {
   filter: drop-shadow(0 0 24px rgba(201, 168, 76, 0.55));
 }
 
-/* MASSIVE READABLE HEADINGS */
+/* SUPREME READABLE HEADINGS (Giant Typography) */
 .landing-headline {
-  font-size: clamp(36px, 10vw, 52px); /* Giant typography! */
+  font-size: clamp(44px, 12vw, 64px); /* MAJESTIC GIGANTIC TYPOGRAPHY! */
   font-weight: 900;
-  line-height: 1.2;
+  line-height: 1.15;
   margin-bottom: 24px;
   animation: fadeInUp 0.7s ease 0.2s both;
   background: linear-gradient(135deg, var(--text-primary) 0%, var(--gold-light) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
 .landing-headline span {
@@ -242,11 +242,11 @@ html, body {
 }
 
 .landing-subtitle {
-  font-size: 19px; /* Expanded for high legibility */
+  font-size: 24px; /* Giant Subtitle for ultra-high legibility */
   font-weight: 400;
   color: var(--text-secondary);
   line-height: 1.7;
-  margin-bottom: 36px;
+  margin-bottom: 40px;
   animation: fadeInUp 0.7s ease 0.3s both;
 }
 
@@ -255,18 +255,18 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 36px;
+  margin-bottom: 40px;
   animation: fadeInUp 0.7s ease 0.4s both;
 }
 
 .benefit-item {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  padding: 14px 16px; /* COMPACT paddings on mobile */
+  padding: 16px 20px; /* COMPACT paddings on mobile */
   text-align: left;
   transition: border-color 0.2s, background-color 0.2s;
 }
@@ -277,12 +277,12 @@ html, body {
 }
 
 .benefit-icon {
-  font-size: 24px;
+  font-size: 28px; /* Bigger icons */
   flex-shrink: 0;
 }
 
 .benefit-text {
-  font-size: 17px; /* Easily readable */
+  font-size: 20px; /* Massive readable benefits */
   color: var(--text-secondary);
   font-weight: 600;
   line-height: 1.5;
@@ -291,13 +291,13 @@ html, body {
 /* Giant CTA Button (Large tátil area) */
 .cta-button {
   width: 100%;
-  height: 64px;
+  height: 68px; /* Extremely robust touch target */
   padding: 16px 36px;
   background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
   color: #0A0A0B;
   font-family: 'Inter', sans-serif;
-  font-size: 20px; /* Big, friendly, clicky text */
-  font-weight: 800;
+  font-size: 24px; /* GIGANTIC button letters */
+  font-weight: 900;
   border: none;
   border-radius: var(--radius-full);
   cursor: pointer;
@@ -341,21 +341,21 @@ html, body {
 }
 
 .success-icon {
-  font-size: 60px;
-  margin-bottom: 20px;
+  font-size: 72px; /* Giant trophy icon */
+  margin-bottom: 24px;
   display: block;
   animation: bounceIn 0.6s ease both;
 }
 
 .success-title {
-  font-size: 26px;
-  font-weight: 800;
+  font-size: 32px; /* Massive success title */
+  font-weight: 900;
   color: var(--success);
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .success-text {
-  font-size: 18px; /* Giant success text */
+  font-size: 22px; /* Giant success text body */
   color: var(--text-secondary);
   line-height: 1.7;
 }
@@ -364,16 +364,16 @@ html, body {
   background: rgba(248, 113, 113, 0.08);
   border: 1px solid rgba(248, 113, 113, 0.35);
   border-radius: var(--radius-md);
-  padding: 14px 18px;
-  margin-top: 16px;
-  font-size: 15px;
+  padding: 16px 20px;
+  margin-top: 20px;
+  font-size: 17px;
   color: var(--error);
   text-align: center;
 }
 
 .landing-footer {
   margin-top: 36px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
 }
 
@@ -395,7 +395,7 @@ html, body {
 }
 
 .notices-title {
-  font-size: 24px; /* Big feed title */
+  font-size: 26px; /* Giant feed title */
   font-weight: 900;
   color: var(--text-primary);
   margin-bottom: 28px;
@@ -409,7 +409,7 @@ html, body {
 
 .notices-title::before {
   content: '📰';
-  font-size: 24px;
+  font-size: 26px;
 }
 
 .notices-list {
@@ -445,21 +445,21 @@ html, body {
 }
 
 .notice-date {
-  font-size: 0.85rem;
+  font-size: 1rem; /* Highly readable author info */
   color: var(--text-muted);
   font-weight: 600;
 }
 
 .notice-sender {
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: var(--gold-light);
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .notice-title {
-  font-size: 22px; /* Very clear bold titles */
+  font-size: 26px; /* MASSIVE bold titles */
   font-weight: 900;
   color: var(--text-primary);
   margin-bottom: 10px;
@@ -467,7 +467,7 @@ html, body {
 }
 
 .notice-body {
-  font-size: 17px; /* Big readable body */
+  font-size: 20px; /* GIGANTIC notice body text */
   color: var(--text-secondary);
   line-height: 1.65;
   white-space: pre-wrap;
@@ -495,7 +495,7 @@ html, body {
 .notice-link {
   display: inline-block;
   margin-top: 16px;
-  font-size: 15px;
+  font-size: 17px; /* Enlarged link font */
   font-weight: 700;
   color: var(--gold);
   text-decoration: none;
@@ -511,7 +511,7 @@ html, body {
 .notices-end {
   text-align: center;
   padding: 32px 0;
-  font-size: 15px;
+  font-size: 17px;
   color: var(--text-muted);
   font-weight: 500;
 }
@@ -629,7 +629,7 @@ html, body {
 
 .form-label {
   display: block;
-  font-size: 14px;
+  font-size: 17px; /* Enlarged Admin Label */
   font-weight: 700;
   color: var(--text-secondary);
   margin-bottom: 8px;
@@ -643,7 +643,7 @@ html, body {
   border-radius: var(--radius-md);
   color: var(--text-primary);
   font-family: 'Inter', sans-serif;
-  font-size: 16px; /* Prevents auto-zoom on cellular */
+  font-size: 18px; /* Extremely easy to read and write on PC/cellular */
   transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
 }
@@ -748,7 +748,7 @@ html, body {
   background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
   color: #0A0A0B;
   font-family: 'Inter', sans-serif;
-  font-size: 16px;
+  font-size: 19px; /* Expanded admin trigger button */
   font-weight: 800;
   border: none;
   border-radius: var(--radius-md);
