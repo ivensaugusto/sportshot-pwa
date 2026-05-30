@@ -11,6 +11,90 @@ interface DispatchResult {
   removed: number;
 }
 
+const processImageTo21 = (file: File): Promise<File> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+    img.onload = () => {
+      // 1. Create a 1200 x 600 canvas (2:1 aspect ratio)
+      const canvas = document.createElement('canvas');
+      canvas.width = 1200;
+      canvas.height = 600;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject(new Error('Não foi possível obter o contexto 2D do Canvas'));
+        return;
+      }
+
+      // ─── BACKGROUND LAYER: Blurred cover ───
+      const cw = 1200;
+      const ch = 600;
+      const scaleBg = Math.max(cw / img.width, ch / img.height);
+      const bgW = img.width * scaleBg;
+      const bgH = img.height * scaleBg;
+      const bgX = (cw - bgW) / 2;
+      const bgY = (ch - bgH) / 2;
+
+      // Draw raw image for backing
+      ctx.drawImage(img, bgX, bgY, bgW, bgH);
+      
+      // Semi-transparent dark backing
+      ctx.save();
+      ctx.fillStyle = 'rgba(10, 10, 11, 0.7)';
+      ctx.fillRect(0, 0, cw, ch);
+      ctx.restore();
+
+      // Apply blur filter if supported
+      if ('filter' in ctx) {
+        ctx.save();
+        ctx.filter = 'blur(28px) brightness(0.5)';
+        ctx.drawImage(img, bgX, bgY, bgW, bgH);
+        ctx.restore();
+      }
+
+      // ─── FOREGROUND LAYER: Aspect ratio fitted uncropped image ───
+      const scaleFg = Math.min(cw / img.width, ch / img.height);
+      const fgW = img.width * scaleFg;
+      const fgH = img.height * scaleFg;
+      const fgX = (cw - fgW) / 2;
+      const fgY = (ch - fgH) / 2;
+
+      // Draw subtle shadow for premium effect
+      ctx.save();
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.65)';
+      ctx.shadowBlur = 35;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 6;
+      ctx.drawImage(img, fgX, fgY, fgW, fgH);
+      ctx.restore();
+
+      // Convert canvas to blob and then to File
+      canvas.toBlob(
+        (blob) => {
+          if (blob) {
+            const processedFile = new File([blob], file.name, {
+              type: 'image/jpeg',
+              lastModified: Date.now(),
+            });
+            resolve(processedFile);
+          } else {
+            reject(new Error('Falha ao gerar o blob da imagem.'));
+          }
+        },
+        'image/jpeg',
+        0.9 // high quality compression
+      );
+      
+      // Cleanup object URL
+      URL.revokeObjectURL(img.src);
+    };
+    img.onerror = (err) => {
+      reject(err);
+      URL.revokeObjectURL(img.src);
+    };
+  });
+};
+
 export default function AdminPage() {
   const [authState, setAuthState] = useState<AuthState>('checking');
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
@@ -24,6 +108,7 @@ export default function AdminPage() {
   const [url, setUrl] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState('');
+  const [optimizeImage, setOptimizeImage] = useState(true);
   const [sendState, setSendState] = useState<SendState>('idle');
   const [result, setResult] = useState<DispatchResult | null>(null);
   const [sendError, setSendError] = useState('');
@@ -70,14 +155,24 @@ export default function AdminPage() {
 
     try {
       let finalImageUrl = '';
+      let fileToUpload = imageFile;
 
-      if (imageFile) {
+      if (imageFile && optimizeImage) {
+        try {
+          fileToUpload = await processImageTo21(imageFile);
+        } catch (procErr: unknown) {
+          console.error('[Image Optimization] Failed, uploading original:', procErr);
+          // Fallback to original image if processing fails
+        }
+      }
+
+      if (fileToUpload) {
         try {
           // Upload file using unique ID
           const uploaded = await storage.createFile(
             'notices-images',
             'unique()',
-            imageFile
+            fileToUpload
           );
           
           // Get direct preview/view URL from Appwrite
@@ -111,6 +206,7 @@ export default function AdminPage() {
         setUrl('');
         setImageFile(null);
         setImagePreview('');
+        setOptimizeImage(true);
         const fileInput = document.getElementById('notif-image') as HTMLInputElement;
         if (fileInput) fileInput.value = '';
       } else {
@@ -292,6 +388,18 @@ export default function AdminPage() {
                   }
                 }}
               />
+              {imageFile && (
+                <label className="checkbox-container" style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', margin: '12px 0 6px 2px', fontSize: '14px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                  <input
+                    type="checkbox"
+                    className="checkbox-input"
+                    checked={optimizeImage}
+                    onChange={(e) => setOptimizeImage(e.target.checked)}
+                    style={{ width: '18px', height: '18px', accentColor: 'var(--gold)', cursor: 'pointer' }}
+                  />
+                  <span>Otimizar imagem para notificações (evita cortes no celular)</span>
+                </label>
+              )}
               {imagePreview && (
                 <div className="image-preview-container">
                   <span className="preview-label">Pré-visualização da imagem:</span>

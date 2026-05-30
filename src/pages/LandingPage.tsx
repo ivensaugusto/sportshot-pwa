@@ -31,6 +31,7 @@ export default function LandingPage() {
   const [loadingNotices, setLoadingNotices] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(0);
+  const [activeTab, setActiveTab] = useState<'subscribe' | 'mural'>('subscribe');
   const LIMIT = 5;
 
   useEffect(() => {
@@ -89,7 +90,7 @@ export default function LandingPage() {
     return () => {
       if (target) observer.unobserve(target);
     };
-  }, [hasMore, loadingNotices]);
+  }, [hasMore, loadingNotices, activeTab]); // Include activeTab to re-observe if we switch tabs
 
   useEffect(() => {
     // Realtime subscription for new notices
@@ -153,176 +154,214 @@ export default function LandingPage() {
 
   return (
     <div className="landing-page-container">
-      <main className="landing" aria-label="Página de inscrição Sportshot">
-        <div className="landing-content">
-          {/* Logo Badge */}
+      {/* Sleek mobile device mockup for desktop, full screen on mobile */}
+      <div className="app-viewport">
+        {/* Sticky App Header */}
+        <header className="app-header">
           <div className="logo-badge" role="banner">
             <span className="logo-badge-dot" aria-hidden="true" />
             <span className="logo-badge-text">🎯 Sportshot Clube de Tiro</span>
           </div>
+        </header>
 
-          {/* Target Icon */}
-          <div className="target-icon" aria-hidden="true">
-            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="40" cy="40" r="38" stroke="#C9A84C" strokeWidth="2" opacity="0.3"/>
-              <circle cx="40" cy="40" r="28" stroke="#C9A84C" strokeWidth="2" opacity="0.5"/>
-              <circle cx="40" cy="40" r="18" stroke="#C9A84C" strokeWidth="2" opacity="0.7"/>
-              <circle cx="40" cy="40" r="8" fill="#C9A84C"/>
-              <circle cx="40" cy="40" r="3" fill="#0A0A0B"/>
-              {/* Crosshair lines */}
-              <line x1="40" y1="2" x2="40" y2="24" stroke="#C9A84C" strokeWidth="2" opacity="0.5"/>
-              <line x1="40" y1="56" x2="40" y2="78" stroke="#C9A84C" strokeWidth="2" opacity="0.5"/>
-              <line x1="2" y1="40" x2="24" y2="40" stroke="#C9A84C" strokeWidth="2" opacity="0.5"/>
-              <line x1="56" y1="40" x2="78" y2="40" stroke="#C9A84C" strokeWidth="2" opacity="0.5"/>
-            </svg>
-          </div>
+        {/* Scrollable Main Area */}
+        <div className="app-screen-content">
+          {activeTab === 'subscribe' ? (
+            /* SUBSCRIBE VIEW */
+            <main className="landing" aria-label="Página de inscrição Sportshot">
+              <div className="landing-content animate-fade-in">
+                {/* Target Icon */}
+                <div className="target-icon" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="40" cy="40" r="38" stroke="#C9A84C" strokeWidth="2" opacity="0.3"/>
+                    <circle cx="40" cy="40" r="28" stroke="#C9A84C" strokeWidth="2" opacity="0.5"/>
+                    <circle cx="40" cy="40" r="18" stroke="#C9A84C" strokeWidth="2" opacity="0.7"/>
+                    <circle cx="40" cy="40" r="8" fill="#C9A84C"/>
+                    <circle cx="40" cy="40" r="3" fill="#0A0A0B"/>
+                    {/* Crosshair lines */}
+                    <line x1="40" y1="2" x2="40" y2="24" stroke="#C9A84C" strokeWidth="2" opacity="0.5"/>
+                    <line x1="40" y1="56" x2="40" y2="78" stroke="#C9A84C" strokeWidth="2" opacity="0.5"/>
+                    <line x1="2" y1="40" x2="24" y2="40" stroke="#C9A84C" strokeWidth="2" opacity="0.5"/>
+                    <line x1="56" y1="40" x2="78" y2="40" stroke="#C9A84C" strokeWidth="2" opacity="0.5"/>
+                  </svg>
+                </div>
 
-          {state === 'success' ? (
-            /* SUCCESS STATE */
-            <div className="success-card" role="status" aria-live="polite">
-              <span className="success-icon" aria-hidden="true">🏆</span>
-              <h1 className="success-title">Você está dentro!</h1>
-              <p className="success-text">
-                Agora você vai receber em primeira mão todos os avisos da Sportshot direto no seu dispositivo. 
-                Fique de olho nas próximas novidades!
-              </p>
-            </div>
-          ) : (
-            /* DEFAULT STATE */
-            <>
-              <h1 className="landing-headline">
-                Fique por dentro do que acontece na
-                <span>Sportshot!</span>
-              </h1>
+                {state === 'success' ? (
+                  /* SUCCESS STATE */
+                  <div className="success-card" role="status" aria-live="polite">
+                    <span className="success-icon" aria-hidden="true">🏆</span>
+                    <h1 className="success-title">Você está dentro!</h1>
+                    <p className="success-text">
+                      Agora você vai receber em primeira mão todos os avisos da Sportshot direto no seu dispositivo. 
+                      Fique de olho nas próximas novidades!
+                    </p>
+                    <button
+                      className="cta-button"
+                      onClick={() => setActiveTab('mural')}
+                      style={{ marginTop: 24, height: 52, fontSize: 15 }}
+                    >
+                      📰 Ver Mural de Avisos
+                    </button>
+                  </div>
+                ) : (
+                  /* DEFAULT STATE */
+                  <>
+                    <h1 className="landing-headline">
+                      Fique por dentro do que acontece na
+                      <span>Sportshot!</span>
+                    </h1>
 
-              <p className="landing-subtitle">
-                Ative nossos avisos no seu celular e receba em primeira mão convites 
-                para eventos, torneios e promoções exclusivas. Sem spam, só o que importa.
-              </p>
+                    <p className="landing-subtitle">
+                      Ative nossos avisos no seu celular e receba em primeira mão convites 
+                      para eventos, torneios e promoções exclusivas. Sem spam, só o que importa.
+                    </p>
 
-              <div className="benefits" aria-label="Benefícios">
-                <div className="benefit-item">
-                  <span className="benefit-icon" aria-hidden="true">🏆</span>
-                  <span className="benefit-text">Convites antecipados para torneios e competições</span>
-                </div>
-                <div className="benefit-item">
-                  <span className="benefit-icon" aria-hidden="true">🎯</span>
-                  <span className="benefit-text">Novidades sobre eventos e atividades do clube</span>
-                </div>
-                <div className="benefit-item">
-                  <span className="benefit-icon" aria-hidden="true">⭐</span>
-                  <span className="benefit-text">Promoções exclusivas para membros cadastrados</span>
-                </div>
-              </div>
+                    <div className="benefits" aria-label="Benefícios">
+                      <div className="benefit-item">
+                        <span className="benefit-icon" aria-hidden="true">🏆</span>
+                        <span className="benefit-text">Convites antecipados para torneios e competições</span>
+                      </div>
+                      <div className="benefit-item">
+                        <span className="benefit-icon" aria-hidden="true">🎯</span>
+                        <span className="benefit-text">Novidades sobre eventos e atividades do clube</span>
+                      </div>
+                      <div className="benefit-item">
+                        <span className="benefit-icon" aria-hidden="true">⭐</span>
+                        <span className="benefit-text">Promoções exclusivas para membros cadastrados</span>
+                      </div>
+                    </div>
 
-              {state === 'unsupported' ? (
-                <div className="error-banner" role="alert">
-                  ⚠️ Seu navegador não suporta notificações push. Tente no Chrome ou Firefox.
-                </div>
-              ) : state === 'denied' ? (
-                <div className="error-banner" role="alert">
-                  🔒 Permissão negada. Vá nas configurações do navegador e permita notificações para este site.
-                </div>
-              ) : (
-                <>
-                  <button
-                    id="subscribe-btn"
-                    className={`cta-button ${state === 'loading' ? 'loading' : ''}`}
-                    onClick={handleSubscribe}
-                    disabled={state === 'loading'}
-                    aria-label="Ativar notificações do clube Sportshot"
-                  >
-                    {state === 'loading' ? (
-                      <>
-                        <span className="spinner" aria-hidden="true" />
-                        Ativando...
-                      </>
+                    {state === 'unsupported' ? (
+                      <div className="error-banner" role="alert">
+                        ⚠️ Seu navegador não suporta notificações push. Tente no Chrome ou Firefox.
+                      </div>
+                    ) : state === 'denied' ? (
+                      <div className="error-banner" role="alert">
+                        🔒 Permissão negada. Vá nas configurações do navegador e permita notificações para este site.
+                      </div>
                     ) : (
                       <>
-                        🔔 Quero receber os avisos
+                        <button
+                          id="subscribe-btn"
+                          className={`cta-button ${state === 'loading' ? 'loading' : ''}`}
+                          onClick={handleSubscribe}
+                          disabled={state === 'loading'}
+                          aria-label="Ativar notificações do clube Sportshot"
+                        >
+                          {state === 'loading' ? (
+                            <>
+                              <span className="spinner" aria-hidden="true" />
+                              Ativando...
+                            </>
+                          ) : (
+                            <>
+                              🔔 Quero receber os avisos
+                            </>
+                          )}
+                        </button>
+
+                        {state === 'error' && (
+                          <div className="error-banner" role="alert">
+                            ❌ {error || 'Não foi possível ativar. Tente novamente.'}
+                          </div>
+                        )}
                       </>
                     )}
-                  </button>
+                  </>
+                )}
 
-                  {state === 'error' && (
-                    <div className="error-banner" role="alert">
-                      ❌ {error || 'Não foi possível ativar. Tente novamente.'}
-                    </div>
-                  )}
-                </>
-              )}
-            </>
-          )}
-
-          <p className="landing-footer" aria-label="Rodapé">
-            Sportshot Clube de Tiro • Seus dados estão seguros conosco
-          </p>
-        </div>
-      </main>
-
-      {/* Sidebar Mural */}
-      <aside className="mural-sidebar">
-        <div className="notices-panel">
-          <h2 className="notices-title">Últimos Avisos</h2>
-          
-          {notices.length === 0 && !loadingNotices ? (
-            <div className="notices-end">
-              Nenhuma novidade por enquanto. Fique de olho!
-            </div>
-          ) : (
-            <>
-              <div className="notices-list">
-                {notices.map((notice) => (
-                  <div key={notice.$id} className="notice-card new-notice-animation">
-                    <div className="notice-header">
-                      <span className="notice-date">
-                        {new Date(notice.createdAt).toLocaleDateString('pt-BR', { 
-                          day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' 
-                        })}
-                      </span>
-                      {notice.sender && (
-                        <span className="notice-sender">
-                          por {notice.sender}
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="notice-title">{notice.title}</h3>
-                    <p className="notice-body">{notice.body}</p>
-                    {notice.image && notice.image.trim() !== '' && (
-                      <img 
-                        src={notice.image} 
-                        alt={notice.title} 
-                        className="notice-image" 
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none';
-                        }} 
-                      />
-                    )}
-                    {notice.url && notice.url !== '/' && notice.url !== 'https://sportshot.simplemsg.net.br/' && (
-                      <a href={notice.url} target="_blank" rel="noopener noreferrer" className="notice-link">
-                        Saber mais →
-                      </a>
-                    )}
-                  </div>
-                ))}
+                <p className="landing-footer" aria-label="Rodapé">
+                  Sportshot Clube de Tiro • Seus dados estão seguros conosco
+                </p>
               </div>
-
-              {/* Scroll Trigger for Infinite Loading */}
-              {hasMore && notices.length > 0 ? (
-                <div id="scroll-trigger" className="notices-loading">
-                  {loadingNotices ? 'Carregando mais avisos...' : ''}
-                </div>
-              ) : (
-                notices.length > 0 && (
+            </main>
+          ) : (
+            /* MURAL / NOTICES VIEW */
+            <aside className="mural-sidebar" aria-label="Mural de avisos Sportshot">
+              <div className="notices-panel">
+                <h2 className="notices-title">Últimos Avisos</h2>
+                
+                {notices.length === 0 && !loadingNotices ? (
                   <div className="notices-end">
-                    Todos os avisos foram carregados.
+                    Nenhuma novidade por enquanto. Fique de olho!
                   </div>
-                )
-              )}
-            </>
+                ) : (
+                  <>
+                    <div className="notices-list">
+                      {notices.map((notice) => (
+                        <div key={notice.$id} className="notice-card new-notice-animation">
+                          <div className="notice-header">
+                            <span className="notice-date">
+                              {new Date(notice.createdAt).toLocaleDateString('pt-BR', { 
+                                day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' 
+                              })}
+                            </span>
+                            {notice.sender && (
+                              <span className="notice-sender">
+                                por {notice.sender}
+                              </span>
+                            )}
+                          </div>
+                          <h3 className="notice-title">{notice.title}</h3>
+                          <p className="notice-body">{notice.body}</p>
+                          {notice.image && notice.image.trim() !== '' && (
+                            <img 
+                              src={notice.image} 
+                              alt={notice.title} 
+                              className="notice-image" 
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = 'none';
+                              }} 
+                            />
+                          )}
+                          {notice.url && notice.url !== '/' && notice.url !== 'https://sportshot.simplemsg.net.br/' && (
+                            <a href={notice.url} target="_blank" rel="noopener noreferrer" className="notice-link">
+                              Saber mais →
+                            </a>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Scroll Trigger for Infinite Loading */}
+                    {hasMore && notices.length > 0 ? (
+                      <div id="scroll-trigger" className="notices-loading">
+                        {loadingNotices ? 'Carregando mais avisos...' : ''}
+                      </div>
+                    ) : (
+                      notices.length > 0 && (
+                        <div className="notices-end">
+                          Todos os avisos foram carregados.
+                        </div>
+                      )
+                    )}
+                  </>
+                )}
+              </div>
+            </aside>
           )}
         </div>
-      </aside>
+
+        {/* Bottom Navigation Tabs Bar */}
+        <nav className="bottom-nav" aria-label="Navegação do aplicativo">
+          <button
+            className={`bottom-nav-item ${activeTab === 'subscribe' ? 'active' : ''}`}
+            onClick={() => setActiveTab('subscribe')}
+            aria-label="Aba Inscrição"
+          >
+            <span className="bottom-nav-icon">🎯</span>
+            <span className="bottom-nav-label">Início</span>
+          </button>
+          <button
+            className={`bottom-nav-item ${activeTab === 'mural' ? 'active' : ''}`}
+            onClick={() => setActiveTab('mural')}
+            aria-label="Aba Mural de Avisos"
+          >
+            <span className="bottom-nav-icon">📰</span>
+            <span className="bottom-nav-label">Mural</span>
+          </button>
+        </nav>
+      </div>
     </div>
   );
 }
