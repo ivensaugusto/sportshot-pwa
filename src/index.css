@@ -198,7 +198,7 @@ html, body {
 }
 
 .logo-badge-text {
-  font-size: 16px; /* Enlarged badge text */
+  font-size: 46px; /* Enlarged badge text */
   font-weight: 700;
   color: var(--gold);
   letter-spacing: 0.08em;
@@ -207,8 +207,8 @@ html, body {
 
 /* Target icon */
 .target-icon {
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
   margin: 0 auto 28px;
   position: relative;
   animation: fadeInDown 0.7s ease 0.1s both;
@@ -349,14 +349,14 @@ html, body {
 }
 
 .success-title {
-  font-size: 26px;
+  font-size: 46px;
   font-weight: 800;
   color: var(--success);
   margin-bottom: 14px;
 }
 
 .success-text {
-  font-size: 18px; /* Giant success text */
+  font-size: 38px; /* Giant success text */
   color: var(--text-secondary);
   line-height: 1.7;
 }
