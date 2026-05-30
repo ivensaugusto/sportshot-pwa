@@ -159,7 +159,7 @@ export default function LandingPage() {
           {/* Logo Badge */}
           <div className="logo-badge" role="banner">
             <span className="logo-badge-dot" aria-hidden="true" />
-            <span className="logo-badge-text">🎯 Sportshot Clube de Tiro</span>
+            <span className="logo-badge-text">🎯 Sportshot</span>
           </div>
 
           {/* Target Icon */}
@@ -184,45 +184,43 @@ export default function LandingPage() {
               <span className="success-icon" aria-hidden="true">🏆</span>
               <h1 className="success-title">Você está dentro!</h1>
               <p className="success-text">
-                Agora você vai receber em primeira mão todos os avisos da Sportshot direto no seu dispositivo. 
-                Fique de olho nas próximas novidades logo abaixo no nosso mural de avisos!
+                Notificações ativadas! Veja os avisos logo abaixo no nosso mural.
               </p>
             </div>
           ) : (
             /* DEFAULT STATE */
             <>
               <h1 className="landing-headline">
-                Fique por dentro do que acontece na
-                <span>Sportshot!</span>
+                Avisos
+                <span>Sportshot</span>
               </h1>
 
               <p className="landing-subtitle">
-                Ative nossos avisos no seu celular e receba em primeira mão convites 
-                para eventos, torneios e promoções exclusivas. Sem spam, só o que importa.
+                Ative e receba convites, torneios e novidades exclusivas direto no seu celular.
               </p>
 
               <div className="benefits" aria-label="Benefícios">
                 <div className="benefit-item">
                   <span className="benefit-icon" aria-hidden="true">🏆</span>
-                  <span className="benefit-text">Convites antecipados para torneios e competições</span>
+                  <span className="benefit-text">Convites para torneios</span>
                 </div>
                 <div className="benefit-item">
                   <span className="benefit-icon" aria-hidden="true">🎯</span>
-                  <span className="benefit-text">Novidades sobre eventos e atividades do clube</span>
+                  <span className="benefit-text">Eventos e novidades</span>
                 </div>
                 <div className="benefit-item">
                   <span className="benefit-icon" aria-hidden="true">⭐</span>
-                  <span className="benefit-text">Promoções exclusivas para membros cadastrados</span>
+                  <span className="benefit-text">Promoções exclusivas</span>
                 </div>
               </div>
 
               {state === 'unsupported' ? (
                 <div className="error-banner" role="alert">
-                  ⚠️ Seu navegador não suporta notificações push. Tente no Chrome ou Firefox.
+                  ⚠️ Navegador não suportado. Use o Chrome ou Firefox.
                 </div>
               ) : state === 'denied' ? (
                 <div className="error-banner" role="alert">
-                  🔒 Permissão negada. Vá nas configurações do navegador e permita notificações para este site.
+                  🔒 Permissão negada. Ative as notificações deste site nas configurações.
                 </div>
               ) : (
                 <>
@@ -240,7 +238,7 @@ export default function LandingPage() {
                       </>
                     ) : (
                       <>
-                        🔔 Quero receber os avisos
+                        🔔 Receber Avisos
                       </>
                     )}
                   </button>
@@ -256,7 +254,7 @@ export default function LandingPage() {
           )}
 
           <p className="landing-footer" aria-label="Rodapé">
-            Sportshot Clube de Tiro • Seus dados estão seguros conosco
+            Sportshot • Dados Seguros
           </p>
         </div>
       </main>
@@ -268,7 +266,7 @@ export default function LandingPage() {
           
           {notices.length === 0 && !loadingNotices ? (
             <div className="notices-end">
-              Nenhuma novidade por enquanto. Fique de olho!
+              Nenhum aviso por enquanto.
             </div>
           ) : (
             <>
@@ -311,12 +309,12 @@ export default function LandingPage() {
               {/* Scroll Trigger for Infinite Loading */}
               {hasMore && notices.length > 0 ? (
                 <div id="scroll-trigger" className="notices-loading">
-                  {loadingNotices ? 'Carregando mais avisos...' : ''}
+                  {loadingNotices ? 'Carregando...' : ''}
                 </div>
               ) : (
                 notices.length > 0 && (
                   <div className="notices-end">
-                    Todos os avisos foram carregados.
+                    Fim dos avisos.
                   </div>
                 )
               )}

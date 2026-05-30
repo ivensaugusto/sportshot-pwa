@@ -56,6 +56,7 @@ html, body {
   line-height: 1.6;
   margin: 0;
   padding: 0;
+  font-size: 20px; /* SUPREME BASE FONT SIZE */
 }
 
 /* ===========================================
@@ -197,7 +198,7 @@ html, body {
 }
 
 .logo-badge-text {
-  font-size: 15px; /* Enlarged badge text */
+  font-size: 16px; /* Enlarged badge text */
   font-weight: 700;
   color: var(--gold);
   letter-spacing: 0.08em;
@@ -221,7 +222,7 @@ html, body {
 
 /* SUPREME READABLE HEADINGS (Giant Typography) */
 .landing-headline {
-  font-size: clamp(44px, 12vw, 64px); /* MAJESTIC GIGANTIC TYPOGRAPHY! */
+  font-size: clamp(48px, 14vw, 76px); /* MAJESTIC GIGANTIC TYPOGRAPHY! */
   font-weight: 900;
   line-height: 1.15;
   margin-bottom: 24px;
@@ -242,7 +243,7 @@ html, body {
 }
 
 .landing-subtitle {
-  font-size: 24px; /* Giant Subtitle for ultra-high legibility */
+  font-size: 28px; /* Giant Subtitle for ultra-high legibility */
   font-weight: 400;
   color: var(--text-secondary);
   line-height: 1.7;
@@ -277,12 +278,12 @@ html, body {
 }
 
 .benefit-icon {
-  font-size: 28px; /* Bigger icons */
+  font-size: 32px; /* Bigger icons */
   flex-shrink: 0;
 }
 
 .benefit-text {
-  font-size: 20px; /* Massive readable benefits */
+  font-size: 22px; /* Massive readable benefits */
   color: var(--text-secondary);
   font-weight: 600;
   line-height: 1.5;
@@ -296,7 +297,7 @@ html, body {
   background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
   color: #0A0A0B;
   font-family: 'Inter', sans-serif;
-  font-size: 24px; /* GIGANTIC button letters */
+  font-size: 26px; /* GIGANTIC button letters */
   font-weight: 900;
   border: none;
   border-radius: var(--radius-full);
@@ -341,7 +342,7 @@ html, body {
 }
 
 .success-icon {
-  font-size: 72px; /* Giant trophy icon */
+  font-size: 76px; /* Giant trophy icon */
   margin-bottom: 24px;
   display: block;
   animation: bounceIn 0.6s ease both;
@@ -395,7 +396,7 @@ html, body {
 }
 
 .notices-title {
-  font-size: 26px; /* Giant feed title */
+  font-size: 28px; /* Giant feed title */
   font-weight: 900;
   color: var(--text-primary);
   margin-bottom: 28px;
@@ -409,7 +410,7 @@ html, body {
 
 .notices-title::before {
   content: '📰';
-  font-size: 26px;
+  font-size: 28px;
 }
 
 .notices-list {
@@ -445,13 +446,13 @@ html, body {
 }
 
 .notice-date {
-  font-size: 1rem; /* Highly readable author info */
+  font-size: 1.1rem; /* Highly readable author info */
   color: var(--text-muted);
   font-weight: 600;
 }
 
 .notice-sender {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: var(--gold-light);
   font-weight: 800;
   text-transform: uppercase;
@@ -459,7 +460,7 @@ html, body {
 }
 
 .notice-title {
-  font-size: 26px; /* MASSIVE bold titles */
+  font-size: 28px; /* MASSIVE bold titles */
   font-weight: 900;
   color: var(--text-primary);
   margin-bottom: 10px;
@@ -467,7 +468,7 @@ html, body {
 }
 
 .notice-body {
-  font-size: 20px; /* GIGANTIC notice body text */
+  font-size: 22px; /* GIGANTIC notice body text */
   color: var(--text-secondary);
   line-height: 1.65;
   white-space: pre-wrap;
@@ -495,7 +496,7 @@ html, body {
 .notice-link {
   display: inline-block;
   margin-top: 16px;
-  font-size: 17px; /* Enlarged link font */
+  font-size: 19px; /* Enlarged link font */
   font-weight: 700;
   color: var(--gold);
   text-decoration: none;
@@ -511,7 +512,7 @@ html, body {
 .notices-end {
   text-align: center;
   padding: 32px 0;
-  font-size: 17px;
+  font-size: 19px;
   color: var(--text-muted);
   font-weight: 500;
 }
@@ -570,7 +571,7 @@ html, body {
 }
 
 /* ===========================================
-   ADMIN & LOGIN STYLES (Responsive & Spacious)
+   ADMIN & LOGIN STYLES (Responsive & Spacious & Mobile-First)
    =========================================== */
 
 .admin-wrapper {
@@ -579,16 +580,17 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 48px 12px; /* Mobile-First: compact padding to use screen real estate */
+  width: 100%;
 }
 
 .login-card {
   width: 100%;
-  max-width: 440px;
+  max-width: 460px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
-  padding: 44px 32px;
+  padding: 44px 20px; /* Expanded and compact mobile margins */
   box-shadow: var(--shadow-card);
   animation: fadeInScale 0.5s ease forwards;
 }
@@ -599,51 +601,51 @@ html, body {
 }
 
 .login-logo-icon {
-  width: 60px;
-  height: 60px;
+  width: 64px;
+  height: 64px;
   background: linear-gradient(135deg, var(--gold), var(--gold-light));
   border-radius: var(--radius-md);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 30px;
+  font-size: 32px;
   margin-bottom: 12px;
   box-shadow: var(--shadow-button);
 }
 
 .login-title {
-  font-size: 24px;
-  font-weight: 800;
+  font-size: 30px; /* Giant admin login title */
+  font-weight: 900;
   color: var(--text-primary);
 }
 
 .login-subtitle {
-  font-size: 14px;
+  font-size: 18px; /* Giant subtitle */
   color: var(--text-muted);
   margin-top: 4px;
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 24px; /* More spacing */
 }
 
 .form-label {
   display: block;
-  font-size: 17px; /* Enlarged Admin Label */
-  font-weight: 700;
+  font-size: 20px; /* Giant Admin Label */
+  font-weight: 800;
   color: var(--text-secondary);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .form-input {
   width: 100%;
-  padding: 14px 18px;
+  padding: 16px 20px; /* Expanded input sizing */
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   color: var(--text-primary);
   font-family: 'Inter', sans-serif;
-  font-size: 18px; /* Extremely easy to read and write on PC/cellular */
+  font-size: 20px; /* Giant inputs font for ultra ease of typing */
   transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
 }
@@ -660,8 +662,8 @@ html, body {
 
 .admin-panel {
   width: 100%;
-  max-width: 580px;
-  padding: 40px 20px;
+  max-width: 720px; /* Expanded panel bounds */
+  padding: 0;
 }
 
 .admin-header {
@@ -671,6 +673,7 @@ html, body {
   margin-bottom: 32px;
   padding-bottom: 20px;
   border-bottom: 1.5px solid var(--border-subtle);
+  gap: 12px;
 }
 
 .admin-brand {
@@ -680,25 +683,25 @@ html, body {
 }
 
 .admin-brand-icon {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   background: linear-gradient(135deg, var(--gold), var(--gold-light));
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 24px;
   box-shadow: 0 4px 12px rgba(201, 168, 76, 0.35);
 }
 
 .admin-brand-name {
-  font-size: 20px;
-  font-weight: 800;
+  font-size: 24px; /* Giant brand name */
+  font-weight: 900;
   color: var(--text-primary);
 }
 
 .admin-brand-role {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--gold);
   font-weight: 600;
 }
@@ -710,10 +713,11 @@ html, body {
   padding: 10px 18px;
   border-radius: var(--radius-full);
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 16px; /* Giant logout */
+  font-weight: 700;
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s;
+  flex-shrink: 0;
 }
 
 .logout-btn:hover {
@@ -725,31 +729,33 @@ html, body {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
-  padding: 36px 28px;
+  padding: 36px 16px; /* Mobile-First: compact padding inside dispatch card */
   box-shadow: var(--shadow-card);
+  width: 100%;
 }
 
 .dispatch-title {
-  font-size: 22px;
-  font-weight: 800;
+  font-size: 26px; /* Giant dispatch title */
+  font-weight: 900;
   color: var(--text-primary);
   margin-bottom: 6px;
 }
 
 .dispatch-subtitle {
-  font-size: 15px;
+  font-size: 18px; /* Giant dispatch subtitle */
   color: var(--text-muted);
   margin-top: 2px;
 }
 
 .send-button {
   width: 100%;
+  height: 64px;
   padding: 16px 28px;
   background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
   color: #0A0A0B;
   font-family: 'Inter', sans-serif;
-  font-size: 19px; /* Expanded admin trigger button */
-  font-weight: 800;
+  font-size: 22px; /* Expanded admin trigger button */
+  font-weight: 900;
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
@@ -759,7 +765,7 @@ html, body {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 24px;
 }
 
 .send-button:hover:not(:disabled) {
@@ -777,14 +783,14 @@ html, body {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 18px 22px;
-  margin-top: 20px;
+  margin-top: 24px;
   display: flex;
   align-items: center;
   gap: 14px;
 }
 
 .stats-icon {
-  font-size: 26px;
+  font-size: 30px;
 }
 
 .stats-info {
@@ -792,13 +798,13 @@ html, body {
 }
 
 .stats-value {
-  font-size: 20px;
+  font-size: 22px; /* Giant stats */
   font-weight: 800;
   color: var(--gold);
 }
 
 .stats-label {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-muted);
 }
 
@@ -809,8 +815,8 @@ html, body {
   padding: 16px 20px;
   border-radius: var(--radius-md);
   margin-top: 20px;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 18px; /* Giant results banner text */
+  font-weight: 700;
 }
 
 .result-banner.success {
@@ -835,8 +841,8 @@ html, body {
 
 .preview-label {
   display: block;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 800;
   color: var(--gold);
   margin-bottom: 8px;
   text-transform: uppercase;
@@ -854,4 +860,14 @@ html, body {
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+/* Checkbox container enlarged */
+.checkbox-container {
+  font-size: 17px !important;
+}
+
+.checkbox-input {
+  width: 22px !important;
+  height: 22px !important;
 }

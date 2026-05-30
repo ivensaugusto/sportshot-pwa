@@ -226,7 +226,7 @@ export default function AdminPage() {
       <div className="admin-wrapper">
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: 'var(--text-muted)' }}>
           <div className="spinner" style={{ borderTopColor: 'var(--gold)' }} />
-          <span>Verificando autenticação...</span>
+          <span>Autenticando...</span>
         </div>
       </div>
     );
@@ -239,8 +239,8 @@ export default function AdminPage() {
         <div className="login-card" role="main">
           <div className="login-logo">
             <div className="login-logo-icon" aria-hidden="true">🎯</div>
-            <h1 className="login-title">Área Administrativa</h1>
-            <p className="login-subtitle">Sportshot Clube de Tiro</p>
+            <h1 className="login-title">Painel Admin</h1>
+            <p className="login-subtitle">Sportshot</p>
           </div>
 
           <form onSubmit={handleLogin} aria-label="Formulário de login">
@@ -325,21 +325,21 @@ export default function AdminPage() {
         </header>
 
         <div className="dispatch-card">
-          <h2 className="dispatch-title">📣 Disparar Notificação</h2>
+          <h2 className="dispatch-title">📣 Disparar Aviso</h2>
           <p className="dispatch-subtitle">
-            A notificação será enviada para todos os inscritos ativos.
+            Envie notificações em massa.
           </p>
 
           <form onSubmit={handleDispatch} aria-label="Formulário de disparo de notificação">
             <div className="form-group">
-              <label htmlFor="notif-title" className="form-label">Título da Notificação</label>
+              <label htmlFor="notif-title" className="form-label">Título</label>
               <input
                 id="notif-title"
                 type="text"
                 className="form-input"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Ex: Torneio de Tiro Esportivo — Inscrições Abertas!"
+                placeholder="Ex: Torneio de Tiro Esportivo!"
                 maxLength={80}
                 required
               />
@@ -352,26 +352,26 @@ export default function AdminPage() {
                 className="form-input form-textarea"
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
-                placeholder="Ex: Participe do nosso torneio mensal. Vagas limitadas, inscreva-se agora!"
+                placeholder="Ex: Participe do torneio mensal neste fim de semana."
                 maxLength={200}
                 required
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="notif-url" className="form-label">Link de Destino (Opcional)</label>
+              <label htmlFor="notif-url" className="form-label">Link (Opcional)</label>
               <input
                 id="notif-url"
                 type="url"
                 className="form-input"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                placeholder="Ex: https://forms.gle/... ou https://seusite.com/evento"
+                placeholder="Ex: https://sportshot.com.br/torneio"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="notif-image" className="form-label">Imagem de Ilustração (Opcional)</label>
+              <label htmlFor="notif-image" className="form-label">Imagem (Opcional)</label>
               <input
                 id="notif-image"
                 type="file"
@@ -389,20 +389,20 @@ export default function AdminPage() {
                 }}
               />
               {imageFile && (
-                <label className="checkbox-container" style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', margin: '12px 0 6px 2px', fontSize: '14px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                <label className="checkbox-container" style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', margin: '12px 0 6px 2px', fontSize: '15px', fontWeight: 600, color: 'var(--text-secondary)' }}>
                   <input
                     type="checkbox"
                     className="checkbox-input"
                     checked={optimizeImage}
                     onChange={(e) => setOptimizeImage(e.target.checked)}
-                    style={{ width: '18px', height: '18px', accentColor: 'var(--gold)', cursor: 'pointer' }}
+                    style={{ width: '20px', height: '20px', accentColor: 'var(--gold)', cursor: 'pointer' }}
                   />
                   <span>Otimizar imagem para notificações (evita cortes no celular)</span>
                 </label>
               )}
               {imagePreview && (
                 <div className="image-preview-container">
-                  <span className="preview-label">Pré-visualização da imagem:</span>
+                  <span className="preview-label">Pré-visualização:</span>
                   <img 
                     src={imagePreview} 
                     alt="Preview" 
@@ -425,14 +425,14 @@ export default function AdminPage() {
                   Disparando...
                 </>
               ) : (
-                '🚀 Disparar para Todos'
+                '🚀 Disparar Notificação'
               )}
             </button>
           </form>
 
           {sendState === 'success' && result && (
             <div className="result-banner success" role="status" aria-live="polite">
-              ✅ Disparado! {result.sent} enviados • {result.failed} falhas • {result.removed} removidos
+              ✅ Enviado! {result.sent} Sucessos • {result.failed} Falhas
             </div>
           )}
 
@@ -445,9 +445,8 @@ export default function AdminPage() {
           <div className="stats-card" aria-label="Informações do canal">
             <span className="stats-icon" aria-hidden="true">🔔</span>
             <div className="stats-info">
-              <div className="stats-label">Canal de comunicação</div>
-              <div className="stats-value" style={{ fontSize: 14, marginTop: 2 }}>
-                Web Push — custo zero de envio
+              <div className="stats-value" style={{ fontSize: 16, marginTop: 2 }}>
+                Disparo Grátis via Web Push
               </div>
             </div>
           </div>
